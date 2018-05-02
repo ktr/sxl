@@ -7,6 +7,11 @@ Python. After trying pandas_, openpyxl_, xlwings_, and even win32com_ it seems
 that none have the ability to iterate over large Excel files without loading
 them completely into memory. So when you are 
 
+The name comes from the fact that being lax_ means that one is not tense,
+rigid, or firm. The ``xl`` on the end is homage to the mighty Excel files that
+it deals with. I know - not a great name, but there are probably more important
+things to worry about!
+
 ***************
 Getting Started
 ***************
@@ -49,3 +54,4 @@ The project is licensed under the MIT License - see the LICENSE.md_ file for det
 .. _win32com: http://docs.activestate.com/activepython/2.4/pywin32/html/com/win32com/HTML/docindex.html
 .. _pandas: https://pandas.pydata.org/
 .. _license.md: /LICENSE.md
+.. _lax: http://www.dictionary.com/browse/lax?s=t
