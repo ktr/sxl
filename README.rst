@@ -50,5 +50,5 @@ details
 .. _xlwings: http://docs.xlwings.org/en/stable/quickstart.html
 .. _win32com: http://docs.activestate.com/activepython/2.4/pywin32/html/com/win32com/HTML/docindex.html
 .. _pandas: https://pandas.pydata.org/
-.. _license.md: /LICENSE.md
+.. _license.md: /LICENSE.txt
 .. _lax: http://www.dictionary.com/browse/lax?s=t
