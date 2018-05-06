@@ -1,29 +1,27 @@
-#############
-laxl Overview
-#############
+============
+sxl Overview
+============
 
 This library is intended to help you deal with big Excel files from within
 Python. After trying pandas_, openpyxl_, xlwings_, and even win32com_ it seems
 that none have the ability to iterate over large Excel files without loading
-them completely into memory. So when you are 
+them completely into memory. So when you are dealing with files that are
+extremely large, this can be burdensome (especially if you only want to examine
+a bit of the file - the first 10 rows say). This library solves that by parsing
+the SpreadsheetML / XML xlsx files using a streaming parser. So you can see the
+first ten rows of any tab within any Excel file extremely quickly.
 
-The name comes from the fact that being lax_ means that one is not tense,
-rigid, or firm. The ``xl`` on the end is homage to the mighty Excel files that
-it deals with. I know - not a great name, but there are probably more important
-things to worry about!
-
-***************
 Getting Started
-***************
+===============
 
 There are no dependancies to install. You just need to::
 
-    pip install laxl
+    pip install sxl
 
 Once installed, you can iterate through the entire file without using much
 memory by doing the following::
 
-    from laxl import Workbook
+    from sxl import Workbook
     wb = Workbook("filepath")
     ws = wb.sheets['sheet name'] # or, for example, wb.sheets[1]
     for row in ws.rows:
@@ -35,19 +33,18 @@ If you are only interested in a few rows::
     print(head)
 
 
-*************
 Running Tests
-*************
+=============
 
 To run tests::
 
-    python -m tests.test_xl
+    python -m tests.test_sxl
 
-*******
 License
-*******
+=======
 
-The project is licensed under the MIT License - see the LICENSE.md_ file for details
+The project is licensed under the MIT License - see the LICENSE.md_ file for
+details
 
 .. _openpyxl: https://openpyxl.readthedocs.io/en/stable/
 .. _xlwings: http://docs.xlwings.org/en/stable/quickstart.html

@@ -1,5 +1,5 @@
 """
-setuptools for laxl
+setuptools for sxl
 """
 
 from setuptools import setup, find_packages
@@ -12,10 +12,10 @@ def get_long_desc():
         return f.read()
 
 
-setup(name='laxl',
-      version='0.0.1',
+setup(name='sxl',
+      version='0.0.1a1',
       description='A python module to deal with (very) big Excel files.',
-      url='http://github.com/ktr/laxl',
+      url='http://github.com/ktr/sxl',
       author='Kevin Ryan',
       author_email='ktr@26ocb.com',
       license='MIT',

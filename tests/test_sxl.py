@@ -1,12 +1,12 @@
 """
-test_laxl.py - test laxl library
+test_sxl.py - test sxl library
 """
 
 import datetime
 import os
 import unittest
 
-from .context import laxl
+from .context import sxl
 
 
 class TestExcelCat(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestExcelCat(unittest.TestCase):
     def setUp(self):
         here = os.path.dirname(__file__)
         filepath = os.path.join(here, 'Book1.xlsx')
-        self.wb = laxl.Workbook(filepath)
+        self.wb = sxl.Workbook(filepath)
         self.data = list(self.wb.sheets[1].cat())
 
     def test_first_row_first_col(self):
@@ -61,7 +61,7 @@ class TestExcelHead(unittest.TestCase):
     def setUp(self):
         here = os.path.dirname(__file__)
         self.filepath = os.path.join(here, 'Book1.xlsx')
-        self.data = laxl.Workbook(self.filepath).sheets[1].head()
+        self.data = sxl.Workbook(self.filepath).sheets[1].head()
 
     def test_head_default_len(self):
         self.assertEqual(len(self.data), 10)
@@ -73,11 +73,11 @@ class TestExcelHead(unittest.TestCase):
         self.assertEqual(self.data[6][9], datetime.datetime(2018, 3, 1))
 
     def test_small_head(self):
-        data = laxl.Workbook(self.filepath).sheets[1].head(3)
+        data = sxl.Workbook(self.filepath).sheets[1].head(3)
         self.assertEqual(len(data), 3)
 
     def test_big_head(self):
-        data = laxl.Workbook(self.filepath).sheets[1].head(1000)
+        data = sxl.Workbook(self.filepath).sheets[1].head(1000)
         self.assertEqual(len(data), 46)
 
 
