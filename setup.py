@@ -13,7 +13,7 @@ def get_long_desc():
 
 
 setup(name='sxl',
-      version='0.0.1a1',
+      version='0.0.1a2',
       description='A python module to deal with (very) big Excel files.',
       url='https://github.com/ktr/sxl',
       author='Kevin Ryan',
