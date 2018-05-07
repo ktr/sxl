@@ -32,7 +32,7 @@ class TestNoNumberFormats(unittest.TestCase):
         last_row = ''
         for row in row_iter:
             last_row = row[0]
-        self.asertEqual(last_row, '240')
+        self.assertEqual(last_row, '240')
 
 
 class TestExcelCat(unittest.TestCase):

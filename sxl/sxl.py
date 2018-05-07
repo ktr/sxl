@@ -355,13 +355,15 @@ class Workbook(ExcelObj):
             tree = ET.parse(xml_doc)
             number_fmts_table = tree.find(self.tag_with_ns('numFmts', self.main_ns))
             number_fmts = {}
-            for num_fmt in number_fmts_table.iter(numfmt_tag):
-                number_fmts[num_fmt.get('numFmtId')] = num_fmt.get('formatCode')
+            if number_fmts_table:
+                for num_fmt in number_fmts_table.iter(numfmt_tag):
+                    number_fmts[num_fmt.get('numFmtId')] = num_fmt.get('formatCode')
             number_fmts.update(STANDARD_STYLES)
             style_table = tree.find(self.tag_with_ns('cellXfs', self.main_ns))
-            for style in style_table.iter(style_tag):
-                fmtid = style.get('numFmtId')
-                styles.append(number_fmts[fmtid])
+            if style_table:
+                for style in style_table.iter(style_tag):
+                    fmtid = style.get('numFmtId')
+                    styles.append(number_fmts[fmtid])
         self._styles = styles
         return styles
 
