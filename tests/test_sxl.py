@@ -9,11 +9,36 @@ import unittest
 from .context import sxl
 
 
+def here():
+    "Return filepath to this file"
+    return os.path.dirname(__file__)
+
+
+class TestNoNumberFormats(unittest.TestCase):
+
+    def setUp(self):
+        filepath = os.path.join(here(), 'Book2.xlsx')
+        self.wb = sxl.Workbook(filepath)
+        self.data = list(self.wb.sheets[1].cat())
+
+    def test_leading_zeros(self):
+        self.assertEqual(self.data[3][0], "002")
+
+    def test_none(self):
+        self.assertIsNone(self.data[3][2])
+
+    def test_all_rows(self):
+        row_iter = iter(self.wb.sheets[1].rows)
+        last_row = ''
+        for row in row_iter:
+            last_row = row[0]
+        self.asertEqual(last_row, '240')
+
+
 class TestExcelCat(unittest.TestCase):
 
     def setUp(self):
-        here = os.path.dirname(__file__)
-        filepath = os.path.join(here, 'Book1.xlsx')
+        filepath = os.path.join(here(), 'Book1.xlsx')
         self.wb = sxl.Workbook(filepath)
         self.data = list(self.wb.sheets[1].cat())
 
