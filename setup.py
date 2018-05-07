@@ -15,7 +15,7 @@ def get_long_desc():
 setup(name='sxl',
       version='0.0.1a1',
       description='A python module to deal with (very) big Excel files.',
-      url='http://github.com/ktr/sxl',
+      url='https://github.com/ktr/sxl',
       author='Kevin Ryan',
       author_email='ktr@26ocb.com',
       license='MIT',
