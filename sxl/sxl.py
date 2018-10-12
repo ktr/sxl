@@ -184,6 +184,9 @@ class Range(ExcelObj):
         self.colstop = None
         self.colstep = None
 
+    def __len__(self):
+        return self.worksheet.num_rows
+
     def __iter__(self):
         with self.ws.get_sheet_xml() as xml_doc:
             row_tag = self.tag_with_ns('row', self.main_ns)
