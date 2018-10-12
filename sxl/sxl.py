@@ -113,10 +113,14 @@ class Worksheet(ExcelObj):
 
     def _set_dimensions(self):
         "Return the 'standard' row length of each row in this worksheet"
-        _, end = self.used_area.split(':')
-        last_col, last_row = re.match(r"([A-Z]+)([0-9]+)", end).groups()
-        self._num_cols = self.col_letter_to_num(last_col)
-        self._num_rows = int(last_row)
+        if self.used_area == 'A1':
+            self._num_cols = 0
+            self._num_rows = 0
+        else:
+            _, end = self.used_area.split(':')
+            last_col, last_row = re.match(r"([A-Z]+)([0-9]+)", end).groups()
+            self._num_cols = self.col_letter_to_num(last_col)
+            self._num_rows = int(last_row)
 
     @property
     def num_cols(self):
@@ -137,12 +141,18 @@ class Worksheet(ExcelObj):
         "Return the used area of this sheet"
         if self._used_area is not None:
             return self._used_area
-        tag = self.tag_with_ns('dimension', self.main_ns)
+        dimension_tag = self.tag_with_ns('dimension', self.main_ns)
+        sheet_data_tag = self.tag_with_ns('sheetData', self.main_ns)
         with self.get_sheet_xml() as sheet:
             for event, elem in ET.iterparse(sheet, events=('start', 'end')):
                 if event == 'start':
-                    if elem.tag == tag:
+                    if elem.tag == dimension_tag:
                         used_area = elem.get('ref')
+                        if used_area != 'A1':
+                            break
+                    if elem.tag == sheet_data_tag:
+                        if list(elem):
+                            used_area = 'A1:A1'
                         break
                 elem.clear()
             self._used_area = used_area

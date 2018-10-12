@@ -106,5 +106,29 @@ class TestExcelHead(unittest.TestCase):
         self.assertEqual(len(data), 46)
 
 
+class TestWorksheets(unittest.TestCase):
+
+    def setUp(self):
+        here = os.path.dirname(__file__)
+        self.filepath = os.path.join(here, 'Book1.xlsx')
+        self.wb = sxl.Workbook(self.filepath)
+
+    def test_row_dimensions_on_empty_sheet(self):
+        ws = self.wb.sheets[2]
+        self.assertEqual(ws.num_rows, 0)
+
+    def test_col_dimensions_on_empty_sheet(self):
+        ws = self.wb.sheets[2]
+        self.assertEqual(ws.num_cols, 0)
+
+    def test_row_dimensions_on_sheet_w_one_value(self):
+        ws = self.wb.sheets[3]
+        self.assertEqual(ws.num_rows, 1)
+
+    def test_col_dimensions_on_sheet_w_one_value(self):
+        ws = self.wb.sheets[3]
+        self.assertEqual(ws.num_cols, 1)
+
+
 if __name__ == '__main__':
     unittest.main()
