@@ -244,7 +244,7 @@ class Range(ExcelObj):
             cell_split = lambda cell: re.match(r"([A-Z]+)([0-9]+)", cell).groups()
             first_col, first_row = cell_split(beg)
             last_col, last_row = cell_split(end)
-            first_col = self.col_letter_to_num(first_col)
+            first_col = self.col_letter_to_num(first_col) - 1 # python addressing
             first_row = int(first_row)
             last_col = self.col_letter_to_num(last_col)
             last_row = int(last_row)
