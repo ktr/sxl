@@ -6,7 +6,7 @@ import datetime
 import os
 import unittest
 
-from .context import sxl
+from .context import sxl # type: ignore
 
 
 def here():
@@ -146,6 +146,11 @@ class TestWorksheets(unittest.TestCase):
         data = ws.range('A2:R3')
         exp = [list(range(19, 37)), list(range(37, 55)),]
         self.assertEqual(exp, data)
+
+    def test_range_num_rows(self):
+        ws = self.wb.sheets[1]
+        data = ws.range('A2:R3')
+        self.assertEqual(2, len(data))
 
 
 if __name__ == '__main__':
