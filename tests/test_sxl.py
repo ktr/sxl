@@ -6,7 +6,7 @@ import datetime
 import os
 import unittest
 
-from .context import sxl
+from .context import sxl # type: ignore
 
 
 def here():
@@ -128,6 +128,29 @@ class TestWorksheets(unittest.TestCase):
     def test_col_dimensions_on_sheet_w_one_value(self):
         ws = self.wb.sheets[3]
         self.assertEqual(ws.num_cols, 1)
+
+    def test_get_range_start_w_b(self):
+        ws = self.wb.sheets[1]
+        data = ws.range('B2:R2')[0]
+        exp = list(range(20, 37))
+        self.assertEqual(exp, data)
+
+    def test_get_range_start_w_a(self):
+        ws = self.wb.sheets[1]
+        data = ws.range('A2:R2')[0]
+        exp = list(range(19, 37))
+        self.assertEqual(exp, data)
+
+    def test_get_range_start_w_a_2rows(self):
+        ws = self.wb.sheets[1]
+        data = ws.range('A2:R3')
+        exp = [list(range(19, 37)), list(range(37, 55)),]
+        self.assertEqual(exp, data)
+
+    def test_range_num_rows(self):
+        ws = self.wb.sheets[1]
+        data = ws.range('A2:R3')
+        self.assertEqual(2, len(data))
 
 
 if __name__ == '__main__':
