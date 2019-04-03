@@ -155,19 +155,19 @@ class TestWorksheets(unittest.TestCase):
     def test_time_pm(self):
         expected = datetime.time(hour=18, minute=30)
         ws = self.wb.sheets['Time']
-        cell = ws.range('A1')
+        cell = ws.range('A1')[0][0]
         self.assertEqual(expected, cell)
 
     def test_time_am(self):
         expected = datetime.time(hour=6, minute=30)
         ws = self.wb.sheets['Time']
-        cell = ws.range('A3')
+        cell = ws.range('A3')[0][0]
         self.assertEqual(expected, cell)
 
     def test_time_military(self):
         expected = datetime.time(hour=14, minute=30)
         ws = self.wb.sheets['Time']
-        cell = ws.range('A5')
+        cell = ws.range('A5')[0][0]
         self.assertEqual(expected, cell)
 
 

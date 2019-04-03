@@ -410,7 +410,10 @@ class Workbook(ExcelObj):
             # base date of 1/1/1904.
             base = datetime.datetime(1904, 1, 1)
         days = int(number)
-        partial_days = days - number
+        partial_days = number - days
         seconds = int(round(partial_days * 86400000.0))
         seconds, milliseconds = divmod(seconds, 1000)
-        return base + datetime.timedelta(days, seconds, 0, milliseconds)
+        date = base + datetime.timedelta(days, seconds, 0, milliseconds)
+        if days == 0:
+            return date.time()
+        return date
