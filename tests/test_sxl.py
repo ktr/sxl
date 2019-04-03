@@ -152,6 +152,24 @@ class TestWorksheets(unittest.TestCase):
         data = ws.range('A2:R3')
         self.assertEqual(2, len(data))
 
+    def test_time_pm(self):
+        expected = datetime.time(hour=18, minute=30)
+        ws = self.wb.sheets['Time']
+        cell = ws.range('A1')
+        self.assertEqual(expected, cell)
+
+    def test_time_am(self):
+        expected = datetime.time(hour=6, minute=30)
+        ws = self.wb.sheets['Time']
+        cell = ws.range('A3')
+        self.assertEqual(expected, cell)
+
+    def test_time_military(self):
+        expected = datetime.time(hour=14, minute=30)
+        ws = self.wb.sheets['Time']
+        cell = ws.range('A5')
+        self.assertEqual(expected, cell)
+
 
 if __name__ == '__main__':
     unittest.main()
