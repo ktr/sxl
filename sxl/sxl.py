@@ -240,7 +240,10 @@ class Range(ExcelObj):
             self.start = self.stop = self.step = None
             return matx
         elif isinstance(rng, str):
-            beg, end = rng.split(':')
+            if ':' in rng:
+                beg, end = rng.split(':')
+            else:
+                beg = end = rng
             cell_split = lambda cell: re.match(r"([A-Z]+)([0-9]+)", cell).groups()
             first_col, first_row = cell_split(beg)
             last_col, last_row = cell_split(end)
