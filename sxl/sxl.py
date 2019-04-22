@@ -319,7 +319,8 @@ class Workbook(ExcelObj):
         with self.xls.open('xl/workbook.xml') as xml_doc:
             tree = ET.parse(xml_doc)
             tag = self.tag_with_ns('workbookPr', self.main_ns)
-            if tree.find(tag).get('date1904') == '1':
+            tag_element = tree.find(tag)
+            if tag_element and tag_element.get('date1904') == '1':
                 return 1904
             return 1900
 
