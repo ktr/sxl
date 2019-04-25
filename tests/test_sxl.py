@@ -122,7 +122,7 @@ class TestWorksheets(unittest.TestCase):
         self.assertEqual(ws.num_cols, 0)
 
     def test_row_dimensions_on_sheet_w_one_value(self):
-        ws = self.wb.sheets[3]
+        ws = self.wb.sheets['Sheet3']
         self.assertEqual(ws.num_rows, 1)
 
     def test_col_dimensions_on_sheet_w_one_value(self):
