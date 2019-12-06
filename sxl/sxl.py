@@ -275,9 +275,16 @@ class Range(ExcelObj):
     def _row(self, row):
         lst = [None] * self.ws.num_cols
         col_re = re.compile(r'[A-Z]+')
+        col_pos = 0
         for cell in row:
-            col = cell[0][:col_re.match(cell[0]).end()]
-            col_pos = self.col_letter_to_num(col) - 1
+            # apparently, 'r' attribute is optional and some MS products don't
+            # spit it out. So we default to incrementing from last known col
+            # (or 0 if we are at the beginning) when r is not available.
+            if cell[0]:
+                col = cell[0][:col_re.match(cell[0]).end()]
+                col_pos = self.col_letter_to_num(col) - 1
+            else:
+                col_pos += 1
             style = self.ws.wb.styles[int(cell[3])] if cell[3] else ''
             # convert to python value (if necessary)
             celltype = cell[1]
