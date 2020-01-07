@@ -425,3 +425,20 @@ class Workbook(ExcelObj):
         if days == 0:
             return date.time()
         return date
+
+
+# Some helper functions
+def num2col(num):
+    """Convert given column letter to an Excel column number."""
+    result = []
+    while num:
+        num, rem = divmod(num-1, 26)
+        result[:0] = string.ascii_uppercase[rem]
+    return ''.join(result)
+
+def col2num(ltr):
+    num = 0
+    for c in ltr:
+        if c in string.ascii_letters:
+            num = num * 26 + (ord(c.upper()) - ord('A')) + 1
+    return num
