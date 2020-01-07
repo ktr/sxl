@@ -6,9 +6,11 @@ from abc import ABC
 from collections import namedtuple, ChainMap
 from contextlib import contextmanager
 import datetime
+import io
 from itertools import zip_longest
 import os
 import re
+import string
 import xml.etree.cElementTree as ET
 from zipfile import ZipFile
 
@@ -97,9 +99,8 @@ class Worksheet(ExcelObj):
     def get_sheet_xml(self):
         "Get a pointer to the xml file underlying the current sheet"
         tpl = 'xl/worksheets/sheet{}.xml'
-        f = self.workbook.xls.open(tpl.format(self.number))
-        yield f
-        f.close()
+        with self.workbook.xls.open(tpl.format(self.number)) as f:
+            yield io.TextIOWrapper(f, self.workbook.encoding)
 
     @property
     def range(self):
@@ -312,8 +313,9 @@ class Workbook(ExcelObj):
     Excel workbook
     """
 
-    def __init__(self, workbook_path):
+    def __init__(self, workbook_path, encoding='cp1252'):
         self.xls = ZipFile(workbook_path)
+        self.encoding = encoding
         self._strings = None
         self._sheets = None
         self._styles = None
@@ -324,7 +326,7 @@ class Workbook(ExcelObj):
     def get_date_system(self):
         "Determine the date system used by the current workbook"
         with self.xls.open('xl/workbook.xml') as xml_doc:
-            tree = ET.parse(xml_doc)
+            tree = ET.parse(io.TextIOWrapper(xml_doc, self.encoding))
             tag = self.tag_with_ns('workbookPr', self.main_ns)
             tag_element = tree.find(tag)
             if tag_element and tag_element.get('date1904') == '1':
@@ -340,7 +342,7 @@ class Workbook(ExcelObj):
         ref_tag = self.tag_with_ns('id', self.rel_ns)
         sheet_map = {}
         with self.xls.open('xl/workbook.xml') as xml_doc:
-            tree = ET.parse(xml_doc)
+            tree = ET.parse(io.TextIOWrapper(xml_doc, self.encoding))
             for sheet in tree.iter(tag):
                 name = sheet.get('name')
                 ref = sheet.get(ref_tag)
@@ -361,7 +363,7 @@ class Workbook(ExcelObj):
         tag = self.tag_with_ns('si', self.main_ns)
         strings = []
         with self.xls.open('xl/sharedStrings.xml') as xml_doc:
-            tree = ET.parse(xml_doc)
+            tree = ET.parse(io.TextIOWrapper(xml_doc, self.encoding))
             for elem in tree.iter(tag):
                 strings.append(''.join(_ for _ in elem.itertext()))
         self._strings = strings
@@ -376,7 +378,7 @@ class Workbook(ExcelObj):
         style_tag = self.tag_with_ns('xf', self.main_ns)
         numfmt_tag = self.tag_with_ns('numFmt', self.main_ns)
         with self.xls.open('xl/styles.xml') as xml_doc:
-            tree = ET.parse(xml_doc)
+            tree = ET.parse(io.TextIOWrapper(xml_doc, self.encoding))
             number_fmts_table = tree.find(self.tag_with_ns('numFmts', self.main_ns))
             number_fmts = {}
             if number_fmts_table:
