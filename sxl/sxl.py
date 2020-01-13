@@ -313,15 +313,18 @@ class Workbook(ExcelObj):
     Excel workbook
     """
 
-    def __init__(self, workbook_path, encoding='cp1252'):
-        self.xls = ZipFile(workbook_path)
+    def __init__(self, file_obj, workbook_path=None, encoding='cp1252'):
+        self.xls = ZipFile(file_obj)
         self.encoding = encoding
         self._strings = None
         self._sheets = None
         self._styles = None
         self.date_system = self.get_date_system()
-        self.name = os.path.basename(workbook_path)
-        self.path = workbook_path
+        if workbook_path:
+            self.name = os.path.basename(workbook_path)
+            self.path = workbook_path
+        else:
+            self.name = self.workbook_path = ''
 
     def get_date_system(self):
         "Determine the date system used by the current workbook"
