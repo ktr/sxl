@@ -313,7 +313,7 @@ class Workbook(ExcelObj):
     Excel workbook
     """
 
-    def __init__(self, workbook_path, encoding='cp1252'):
+    def __init__(self, workbook_path, encoding='utf8'):
         self.xls = ZipFile(workbook_path)
         self.encoding = encoding
         self._strings = None

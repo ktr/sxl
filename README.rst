@@ -27,6 +27,11 @@ memory by doing the following::
     for row in ws.rows:
         print(row)
 
+Note that by default we assume the workbook is encoded with UTF-8. If you need
+to specifiy a different encoding, you can do so when opening the workbook::
+
+    wb = Workbook("filepath", encoding='cp1252')
+
 If you are only interested in a few rows::
 
     head = ws.head(5)
