@@ -286,7 +286,12 @@ class Range(ExcelObj):
                 col_pos = self.col_letter_to_num(col) - 1
             else:
                 col_pos += 1
-            style = self.ws.wb.styles[int(cell[3])] if cell[3] else ''
+            
+            try:
+                style = self.ws.wb.styles[int(cell[3])]
+            except Exception as e:
+                style = ''
+
             # convert to python value (if necessary)
             celltype = cell[1]
             cellvalue = cell[2]
@@ -384,12 +389,13 @@ class Workbook(ExcelObj):
             if number_fmts_table:
                 for num_fmt in number_fmts_table.iter(numfmt_tag):
                     number_fmts[num_fmt.get('numFmtId')] = num_fmt.get('formatCode')
-            number_fmts.update(STANDARD_STYLES)
+            number_fmts.update(STANDARD_STYLES)            
             style_table = tree.find(self.tag_with_ns('cellXfs', self.main_ns))
             if style_table:
-                for style in style_table.iter(style_tag):
+                for style in style_table.iter(style_tag):                    
                     fmtid = style.get('numFmtId')
-                    styles.append(number_fmts[fmtid])
+                    if fmtid in number_fmts:
+                        styles.append(number_fmts[fmtid])
         self._styles = styles
         return styles
 
