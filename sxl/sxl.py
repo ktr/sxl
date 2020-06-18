@@ -86,7 +86,7 @@ class Worksheet(ExcelObj):
     Excel worksheet
     """
 
-    def __init__(self, workbook, name, number):
+    def __init__(self, workbook, name, number, location=''):
         self._used_area = None
         self._row_length = None
         self._num_rows = None
@@ -94,12 +94,12 @@ class Worksheet(ExcelObj):
         self.workbook = self.wb = workbook
         self.name = name
         self.number = number
+        self.location = location or 'xl/worksheets/sheet{number}.xml'
 
     @contextmanager
     def get_sheet_xml(self):
         "Get a pointer to the xml file underlying the current sheet"
-        tpl = 'xl/worksheets/sheet{}.xml'
-        with self.workbook.xls.open(tpl.format(self.number)) as f:
+        with self.workbook.xls.open(self.location) as f:
             yield io.TextIOWrapper(f, self.workbook.encoding)
 
     @property
@@ -341,13 +341,20 @@ class Workbook(ExcelObj):
         tag = self.tag_with_ns('sheet', self.main_ns)
         ref_tag = self.tag_with_ns('id', self.rel_ns)
         sheet_map = {}
+        locs = {} # locations from relationship id to target location
+        with self.xls.open('xl/_rels/workbook.xml.rels') as xml_doc:
+            tree = ET.parse(io.TextIOWrapper(xml_doc, self.encoding))
+            for rshp in tree.iter(self.tag_with_ns('Relationship', 'http://schemas.openxmlformats.org/package/2006/relationships')):
+                id = rshp.get('Id')
+                target = rshp.get('Target')
+                locs[id] = target
         with self.xls.open('xl/workbook.xml') as xml_doc:
             tree = ET.parse(io.TextIOWrapper(xml_doc, self.encoding))
             for sheet in tree.iter(tag):
                 name = sheet.get('name')
                 ref = sheet.get(ref_tag)
-                num = int(ref[3:])
-                sheet = Worksheet(self, name, num)
+                num = int(sheet.get('sheetId'))
+                sheet = Worksheet(self, name, num, 'xl/' + locs[ref])
                 sheet_map[name] = sheet
                 sheet_map[num] = sheet
         self._sheets = sheet_map
