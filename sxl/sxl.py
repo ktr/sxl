@@ -123,12 +123,17 @@ class Worksheet(ExcelObj):
             self._num_cols = self.col_letter_to_num(last_col)
             self._num_rows = int(last_row)
 
-    @property
-    def num_cols(self):
+    def _get_num_cols(self):
         "Return the number of standard columns in this worksheet"
         if self._num_cols is None:
             self._set_dimensions()
         return self._num_cols
+
+    def _set_num_cols(self, n):
+        "Set the number of columns in the sheet (use with caution!)"
+        self._num_cols = n
+
+    num_cols = property(_get_num_cols, _set_num_cols)
 
     @property
     def num_rows(self):
@@ -286,6 +291,11 @@ class Range(ExcelObj):
                 col_pos = self.col_letter_to_num(col) - 1
             else:
                 col_pos += 1
+            if col_pos >= len(lst):
+                # dimensions may not be set right in worksheet
+                extend_by = col_pos - len(lst) + 1
+                self.ws.num_cols += extend_by
+                lst += [None for _ in range(extend_by)]
             style = self.ws.wb.styles[int(cell[3])] if cell[3] else ''
             # convert to python value (if necessary)
             celltype = cell[1]
