@@ -171,5 +171,21 @@ class TestWorksheets(unittest.TestCase):
         self.assertEqual(expected, cell)
 
 
+class TestGSheets(unittest.TestCase):
+
+    def setUp(self):
+        here = os.path.dirname(__file__)
+        self.filepath = os.path.join(here, 'Sheets.xlsx')
+        self.wb = sxl.Workbook(self.filepath)
+
+    def test_string_val_from_sheets(self):
+        ws = self.wb.sheets['Sheet1']
+        self.assertEqual(ws.rows[1][0][0], 'Test')
+
+    def test_date_val_from_sheets(self):
+        ws = self.wb.sheets['Sheet1']
+        self.assertEqual(ws.rows[6][0][1], datetime.datetime(2020, 1, 31))
+
+
 if __name__ == '__main__':
     unittest.main()
