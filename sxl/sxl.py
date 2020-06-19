@@ -291,12 +291,18 @@ class Range(ExcelObj):
                 col_pos = self.col_letter_to_num(col) - 1
             else:
                 col_pos += 1
+
             if col_pos >= len(lst):
                 # dimensions may not be set right in worksheet
                 extend_by = col_pos - len(lst) + 1
                 self.ws.num_cols += extend_by
                 lst += [None for _ in range(extend_by)]
-            style = self.ws.wb.styles[int(cell[3])] if cell[3] else ''
+
+            try:
+                style = self.ws.wb.styles[int(cell[3])]
+            except Exception as e:
+                style = ''
+
             # convert to python value (if necessary)
             celltype = cell[1]
             cellvalue = cell[2]
@@ -409,7 +415,8 @@ class Workbook(ExcelObj):
             if style_table:
                 for style in style_table.iter(style_tag):
                     fmtid = style.get('numFmtId')
-                    styles.append(number_fmts[fmtid])
+                    if fmtid in number_fmts:
+                        styles.append(number_fmts[fmtid])
         self._styles = styles
         return styles
 
