@@ -187,5 +187,17 @@ class TestGSheets(unittest.TestCase):
         self.assertEqual(ws.rows[6][0][1], datetime.datetime(2020, 1, 31))
 
 
+class TestBadData(unittest.TestCase):
+
+    def setUp(self):
+        here = os.path.dirname(__file__)
+        self.filepath = os.path.join(here, 'BadData.xlsx')
+        self.wb = sxl.Workbook(self.filepath)
+
+    def test_bad_date(self):
+        ws = self.wb.sheets['Sheet1']
+        self.assertEqual(ws.rows[2][0][0], -693596)
+
+
 if __name__ == '__main__':
     unittest.main()

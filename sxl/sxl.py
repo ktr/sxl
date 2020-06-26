@@ -114,7 +114,7 @@ class Worksheet(ExcelObj):
 
     def _set_dimensions(self):
         "Return the 'standard' row length of each row in this worksheet"
-        if self.used_area == 'A1':
+        if ':' not in self.used_area:
             self._num_cols = 0
             self._num_rows = 0
         else:
@@ -450,6 +450,8 @@ class Workbook(ExcelObj):
         partial_days = number - days
         seconds = int(round(partial_days * 86400000.0))
         seconds, milliseconds = divmod(seconds, 1000)
+        if days < -693594:
+            return days
         date = base + datetime.timedelta(days, seconds, 0, milliseconds)
         if days == 0:
             return date.time()
