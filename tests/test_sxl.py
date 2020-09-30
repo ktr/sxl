@@ -199,5 +199,23 @@ class TestBadData(unittest.TestCase):
         self.assertEqual(ws.rows[2][0][0], -693596)
 
 
+class TestFileWithComments(unittest.TestCase):
+
+    def setUp(self):
+        here = os.path.dirname(__file__)
+        self.filepath = os.path.join(here, 'Comments.xlsx')
+        self.wb = sxl.Workbook(self.filepath)
+
+    def test_sheet_w_comments_and_data(self):
+        ws = self.wb.sheets['w Data']
+        self.assertEqual(ws.rows[5][0][1], 5)
+        self.assertEqual(ws.rows[21][0][5], 5)
+
+    def test_sheet_w_comments(self):
+        ws = self.wb.sheets['no Data']
+        self.assertIsNotNone(ws)
+
+
+
 if __name__ == '__main__':
     unittest.main()
