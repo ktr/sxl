@@ -216,6 +216,17 @@ class TestFileWithComments(unittest.TestCase):
         self.assertIsNotNone(ws)
 
 
+class TestFileWithZipErrors(unittest.TestCase):
+
+    def setUp(self):
+        here = os.path.dirname(__file__)
+        self.filepath = os.path.join(here, 'ErrorCausingTemplate.xlsx')
+        self.wb = sxl.Workbook(self.filepath)
+
+    def test_sheet_w_comments_and_data(self):
+        ws = self.wb.sheets['Template']
+        self.assertEqual(ws.rows[3][0][3], 'SKU12')
+
 
 if __name__ == '__main__':
     unittest.main()
