@@ -5,3 +5,4 @@
 /build/
 *.bak
 ~$*.xlsx
+.vscode
