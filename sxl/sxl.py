@@ -373,7 +373,7 @@ class Workbook(ExcelObj):
                 name = sheet.get('name')
                 ref = sheet.get(ref_tag)
                 num = int(sheet.get('sheetId'))
-                sheet = Worksheet(self, name, num, 'xl/' + locs[ref])
+                sheet = Worksheet(self, name, num, 'xl/' + locs[ref] if not locs[ref].startswith('/') else locs[ref][1:])
                 sheet_map[name] = sheet
                 sheet_map[num] = sheet
         self._sheets = sheet_map
