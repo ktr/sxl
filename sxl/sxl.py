@@ -225,6 +225,10 @@ class Range(ExcelObj):
                         root.clear()
                     elif elem.tag == c_tag:
                         val = elem.findtext(v_tag)
+                        if not val:
+                            is_elem = elem.find(self.tag_with_ns('is', self.main_ns))
+                            if is_elem:
+                                val = is_elem.findtext(self.tag_with_ns('t', self.main_ns))
                         if val:
                             # only append cells with values
                             cell = ['', '', '', ''] # ref, type, value, style
@@ -309,7 +313,7 @@ class Range(ExcelObj):
             # convert to python value (if necessary)
             celltype = cell[1]
             cellvalue = cell[2]
-            if celltype in ('str', 's'):
+            if celltype in ('str', 's', 'inlineStr'):
                 lst[col_pos] = cellvalue
             elif celltype == 'b':
                 lst[col_pos] = bool(int(cellvalue))
