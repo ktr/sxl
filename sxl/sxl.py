@@ -157,8 +157,10 @@ class Worksheet(ExcelObj):
                         if used_area != 'A1':
                             break
                     if elem.tag == sheet_data_tag:
+                        # unreliable
                         if list(elem):
-                            used_area = 'A1:A1'
+                            num_cols = len(list(elem)[0])
+                            used_area = f'A1:{num2col(num_cols)}{len(elem)}'
                         break
                 elem.clear()
             self._used_area = used_area
@@ -201,7 +203,8 @@ class Range(ExcelObj):
             row = []
             this_row = -1
             next_row = 1 if self.start is None else self.start
-            last_row = self.ws.num_rows + 1 if self.stop is None else self.stop
+            # last_row = self.ws.num_rows + 1 if self.stop is None else self.stop
+            last_row = 1_048_576 if self.stop is None else self.stop
             context = ET.iterparse(xml_doc, events=('start', 'end'))
             context = iter(context)
             event, root = next(context)
